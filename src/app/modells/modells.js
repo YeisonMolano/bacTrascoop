@@ -30,11 +30,12 @@ class CarnetIntermunicipal {
 }
 
 class TaxiService {
-    constructor(servicio, placeDeparture, destinationPlace, time){
+    constructor(servicio, placeDeparture, destinationPlace, time, status){
         this.servicio = servicio
         this.placeDeparture = placeDeparture
         this.destinationPlace = destinationPlace
         this.time = time
+        this.status = status
     }
 }
 

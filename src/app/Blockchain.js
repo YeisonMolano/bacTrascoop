@@ -195,6 +195,26 @@ class Blockchain{
         return this.chain[this.chain.length - 1];
     }
 
+    //Funcion que me trae todos los servicios que estan en estado pendiente
+    findAllServiceStatusPending(){
+        let transactions = []
+        let count = 0
+        this.chain.forEach(block => {
+                for (let i = 0; i < block.transactions.length; i++) {
+                    if(block.transactions[i].data != undefined){
+                        if(block.transactions[i].data.newService != undefined){
+                            if(block.transactions[i].data.newService.status == 'PENDING'){
+                                transactions.push(block.transactions[i].data)
+                            }
+                        }
+                    }
+                }
+            count++
+        })
+        return transactions
+    }
+
+    //Trae todas las transacciones que ha hecho un usuario
     findTransactionsByKeyPublic(key){
         let transactions = []
         let count = 0
@@ -202,11 +222,44 @@ class Blockchain{
             console.log('Bloque' + count + '\n\n\n');
                 for (let i = 0; i < 2; i++) {
                     if(block.transactions[i].fromAddress === key){
-                        console.log(block.transactions[i].data);
+                        transactions.push(block.transactions[i].data)
                     }
                 }
             count++
         })
+        return transactions
+    }
+
+    //Traer todos los servicios que tiene pendiente un usuario
+    findTransactionsByService(key){
+        let taxiservices = []
+        let transactions = this.findTransactionsByKeyPublic(key)
+        transactions.forEach(transaction => {
+            console.log('\n\n\nTransaccion');
+            console.log(transaction.newService);
+            if(transaction.newService != undefined && transaction.newService != null){
+                    taxiservices.push(transaction)
+            }
+        })
+        return taxiservices
+    }
+
+    //Traer servicios en estado pendiente
+    findServiceByKey(key){
+        let taxiservices = []
+        let transactions = this.findTransactionsByKeyPublic(key)
+        transactions.forEach(transaction => {
+            console.log('\n\n\nTransaccion');
+            console.log(transaction.newService);
+            if(transaction.newService != undefined && transaction.newService != null){
+                    taxiservices.push(transaction)
+            }
+        })
+        return taxiservices
+    }
+
+    findTransactionsByState(){
+
     }
 
     //Quitamos el AddBlock y lo cambiamos por la funcion de minado de transacciones pendientes, que la llamamos...miningPendingTransactions.

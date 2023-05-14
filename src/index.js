@@ -121,14 +121,62 @@ app.get('/login/:email/:password', (req, res) => {
 })
 
 //Crear una nueva solicitud para un servicio nuevo
-app.post('/new-service', (req, res) => {
-    let newService = TaxiService(req.body.servicio, req.body.placeDeparture, req.body.destinationPlace, req.body.time);
-    const myKey = ec.keyFromPrivate(req.body.privateKey);
+app.post('/new-service/:privateKey', (req, res) => {
+    let newService = new TaxiService(req.body.servicio, req.body.placeDeparture, req.body.destinationPlace, req.body.time, req.body.status);
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
     const myWalletAddress = myKey.getPublic('hex');
     const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newService});
     newTransaction.signTransaction(myKey);
     JJACoin.addTransaction(newTransaction, myWalletAddress);
-    res.json('Se ha cargado una nueva transacción');
+    res.json(newService);
+})
+
+//Crear una nueva solicitud de carnet Intermunicipal
+app.post('/carnet-inter/:privateKey', (req, res) => {
+    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.fechaNacimiento, req.body.img1, req.body.img2, req.body.img3);
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
+    const myWalletAddress = myKey.getPublic('hex');
+    const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newCarnet});
+    newTransaction.signTransaction(myKey);
+    JJACoin.addTransaction(newTransaction, myWalletAddress);
+    res.json(newCarnet)
+})
+
+//Crear una nueva solicitu de carnet urbano
+app.post('/carnet-urbano/:privateKey', (req, res) => {
+    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.fechaNacimiento, req.body.img1);
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
+    const myWalletAddress = myKey.getPublic('hex');
+    const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newCarnet});
+    newTransaction.signTransaction(myKey);
+    JJACoin.addTransaction(newTransaction, myWalletAddress);
+    res.json(newCarnet)
+})
+
+//Obtener trasacciones por publicKey
+app.get('/get-transactions/:privateKey', (req, res) => {
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
+    const myWalletAddress = myKey.getPublic('hex');
+    res.json(JJACoin.findTransactionsByKeyPublic(myWalletAddress))
+})
+
+//Obtener servicios que ha pedido el usuario
+app.get('/get-all-services/:privateKey', (req, res) => {
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
+    const myWalletAddress = myKey.getPublic('hex');
+    res.json(JJACoin.findTransactionsByService(myWalletAddress))
+})
+
+//Obtener servicios que estan pendientes
+app.get('/get-all-users/:privateKey', (req, res) => {
+    const myKey = ec.keyFromPrivate(req.params.privateKey);
+    const myWalletAddress = myKey.getPublic('hex');
+    res.json(JJACoin.findServiceByKey(myWalletAddress))
+})
+
+//Obtener los servicios pendientes que tiene el usuario
+app.get('/get-all-services', (req, res) => {
+    res.json(JJACoin.findAllServiceStatusPending())
 })
 
 app.get('/get-wallet/:privateKey', (req, res) => {
