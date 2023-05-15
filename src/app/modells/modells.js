@@ -18,11 +18,13 @@ class NewUser{
 
 class CarnetIntermunicipal {
 
-    constructor(nombre, apellido, tipoUsuario, fechaNacimiento, img1, img2, img3){
+    constructor(nombre, apellido, tipoUsuario, tipoCarnet, fechaNacimiento, status, img1, img2, img3){
         this.username = nombre
         this.apellido = apellido
         this.tipoUsuario = tipoUsuario
+        this.tipoCarnet = tipoCarnet
         this.fechaNacimiento = fechaNacimiento
+        this.status = status
         this.img1 = img1
         this.img2 = img2
         this.img3 = img3

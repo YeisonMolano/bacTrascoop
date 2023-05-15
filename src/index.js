@@ -107,7 +107,8 @@ app.post('/registrar-usuario', (req, res) => {
     newTransaction.signTransaction(myKey1);
     JJACoin.addTransaction(newTransaction, myWalletAddress1);
     JJACoin.minedPendingTransactions();
-    res.json('Se ha registrado')
+    console.log(newUser);
+    res.json(newUser)
 })
 
 //Realizar el login dentro de la aplicación
@@ -133,7 +134,7 @@ app.post('/new-service/:privateKey', (req, res) => {
 
 //Crear una nueva solicitud de carnet Intermunicipal
 app.post('/carnet-inter/:privateKey', (req, res) => {
-    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.fechaNacimiento, req.body.img1, req.body.img2, req.body.img3);
+    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.tipoCarnet, req.body.fechaNacimiento, req.body.img1, req.body.img2, req.body.img3);
     const myKey = ec.keyFromPrivate(req.params.privateKey);
     const myWalletAddress = myKey.getPublic('hex');
     const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newCarnet});
@@ -144,7 +145,7 @@ app.post('/carnet-inter/:privateKey', (req, res) => {
 
 //Crear una nueva solicitu de carnet urbano
 app.post('/carnet-urbano/:privateKey', (req, res) => {
-    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.fechaNacimiento, req.body.img1);
+    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.tipoCarnet, req.body.fechaNacimiento, req.body.img1);
     const myKey = ec.keyFromPrivate(req.params.privateKey);
     const myWalletAddress = myKey.getPublic('hex');
     const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newCarnet});
@@ -179,8 +180,13 @@ app.get('/get-all-services', (req, res) => {
     res.json(JJACoin.findAllServiceStatusPending())
 })
 
+//Obtener mi wallet a partir de la llave privada
 app.get('/get-wallet/:privateKey', (req, res) => {
     const myKey = ec.keyFromPrivate(req.params.privateKey);
     const myWalletAddress = myKey.getPublic('hex');
     res.json(myWalletAddress)
+})
+
+app.get('/get-carnets-pending', (req, res) =>{
+    res.json(JJACoin.findAllCarnetsPending())
 })

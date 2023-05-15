@@ -203,7 +203,26 @@ class Blockchain{
                 for (let i = 0; i < block.transactions.length; i++) {
                     if(block.transactions[i].data != undefined){
                         if(block.transactions[i].data.newService != undefined){
-                            if(block.transactions[i].data.newService.status == 'PENDING'){
+                            if(block.transactions[i].data.newService.status == 'PENDIENTE'){
+                                transactions.push(block.transactions[i].data)
+                            }
+                        }
+                    }
+                }
+            count++
+        })
+        return transactions
+    }
+
+    //Trae todos los carnets que estan pendientes
+    findAllCarnetsPending(){
+        let transactions = []
+        let count = 0
+        this.chain.forEach(block => {
+                for (let i = 0; i < block.transactions.length; i++) {
+                    if(block.transactions[i].data != undefined){
+                        if(block.transactions[i].data.newCarnte != undefined){
+                            if(block.transactions[i].data.newCarnet.status == 'PENDIENTE'){
                                 transactions.push(block.transactions[i].data)
                             }
                         }
