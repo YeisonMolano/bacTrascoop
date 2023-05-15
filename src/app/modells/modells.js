@@ -1,3 +1,4 @@
+const e = require('express');
 const KeyGeneratorUno = require('../keygenerator');
 const kg = new KeyGeneratorUno();
 
@@ -18,13 +19,14 @@ class NewUser{
 
 class CarnetIntermunicipal {
 
-    constructor(nombre, apellido, tipoUsuario, tipoCarnet, fechaNacimiento, status, img1, img2, img3){
+    constructor(nombre, apellido, tipoUsuario, tipoCarnet, fechaNacimiento, status, email, img1, img2, img3){
         this.username = nombre
         this.apellido = apellido
         this.tipoUsuario = tipoUsuario
         this.tipoCarnet = tipoCarnet
         this.fechaNacimiento = fechaNacimiento
         this.status = status
+        this.email = email
         this.img1 = img1
         this.img2 = img2
         this.img3 = img3

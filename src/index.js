@@ -64,28 +64,6 @@ app.put('/:filename', update.single('image'), (req, res) => {
 //Definimos el nombre de nuestra Blockchain
 let JJACoin = new Blockchain();
 
-//Creamos una transaccion con nuestra wallet
-const tx1= new Transaction(myWalletAddress,'myWalletAddress',10, {username: "a@a.co", password: "Co3lo3mb3ia"});
-const tx2= new Transaction(myWalletAddress,'myWalletAddress',10, {edad: "18", estatura: "qwerty"});
-//Firmamos nuestra transacción
-tx1.signTransaction(myKey);
-tx2.signTransaction(myKey);
-//La transaccion se añade a la blockchain
-JJACoin.addTransaction(tx1, myWalletAddress);
-JJACoin.addTransaction(tx2, myWalletAddress);
-
-//Obtener el balance del minero.
-console.log('\nEl Balance de Jonatan es', JJACoin.getBalanceOfAddress(myWalletAddress));
-
-//Intentamos modificar una de las transacciones.
-//JJACoin.chain[1].transactions[0].amount = 1;
-
-//Comprobamos el principio de no corromper la blockchain con las condiciones creadas en nuestro codigo.
-console.log('Es una Blockchain valida?', JJACoin.isChainValid());
-
-console.log(JJACoin.getLatestBlock().transactions);
-
-
 //Pedir un carnet Intermunicipal
 app.post('/pedir-carnet', (req, res) => {
     let newCanet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.fechaNacimiento, req.body.img1, req.body.img2, req.body.img3);
@@ -145,7 +123,8 @@ app.post('/carnet-inter/:privateKey', (req, res) => {
 
 //Crear una nueva solicitu de carnet urbano
 app.post('/carnet-urbano/:privateKey', (req, res) => {
-    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.tipoCarnet, req.body.fechaNacimiento, req.body.img1);
+    console.log(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.tipoCarnet, req.body.fechaNacimiento, req.body.status, req.body.email, req.body.img1);
+    let newCarnet = new CarnetIntermunicipal(req.body.nombre, req.body.apellido, req.body.tipoUsuario, req.body.tipoCarnet, req.body.fechaNacimiento, req.body.status, req.body.email, req.body.img1);
     const myKey = ec.keyFromPrivate(req.params.privateKey);
     const myWalletAddress = myKey.getPublic('hex');
     const newTransaction = new Transaction(myWalletAddress,'myWalletAddress', 10, {newCarnet});
@@ -187,6 +166,7 @@ app.get('/get-wallet/:privateKey', (req, res) => {
     res.json(myWalletAddress)
 })
 
+//Obtiene los carnets que esta pendientes por aprobar
 app.get('/get-carnets-pending', (req, res) =>{
     res.json(JJACoin.findAllCarnetsPending())
 })

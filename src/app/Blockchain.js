@@ -221,7 +221,8 @@ class Blockchain{
         this.chain.forEach(block => {
                 for (let i = 0; i < block.transactions.length; i++) {
                     if(block.transactions[i].data != undefined){
-                        if(block.transactions[i].data.newCarnte != undefined){
+                        console.log(block.transactions[i].data);
+                        if(block.transactions[i].data.newCarnet != undefined){
                             if(block.transactions[i].data.newCarnet.status == 'PENDIENTE'){
                                 transactions.push(block.transactions[i].data)
                             }
